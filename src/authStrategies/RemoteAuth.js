@@ -3,11 +3,11 @@
 /* Require Optional Dependencies */
 try {
     var fs = require('fs-extra');
-    var AdmZip = require('adm-zip');
+    var unzipper = require('unzipper');
     var archiver = require('archiver');
 } catch {
     fs = undefined;
-    AdmZip = undefined;
+    unzipper = undefined;
     archiver = undefined;
 }
 
@@ -25,7 +25,7 @@ const BaseAuthStrategy = require('./BaseAuthStrategy');
  */
 class RemoteAuth extends BaseAuthStrategy {
     constructor({ clientId, dataPath, store, backupSyncIntervalMs } = {}) {
-        if (!fs && !AdmZip && !archiver) throw new Error('Optional Dependencies [fs-extra, adm-zip, archiver] are required to use RemoteAuth. Make sure to run npm install correctly and remove the --no-optional flag');
+        if (!fs && !unzipper && !archiver) throw new Error('Optional Dependencies [fs-extra, unzipper, archiver] are required to use RemoteAuth. Make sure to run npm install correctly and remove the --no-optional flag');
         super();
 
         const idRegex = /^[-_\w]+$/i;
@@ -46,6 +46,7 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async beforeBrowserInitialized() {
+        console.log("ENTRANDO A BEFORE BROWSER INITIALIZED")
         const puppeteerOpts = this.client.options.puppeteer;
         const sessionDirName = this.clientId ? `RemoteAuth-${this.clientId}` : 'RemoteAuth';
         const dirPath = path.join(this.dataPath, sessionDirName);
@@ -63,6 +64,7 @@ class RemoteAuth extends BaseAuthStrategy {
             ...puppeteerOpts,
             userDataDir: dirPath
         };
+        console.log("SALIENDO DE BEFORE BROWSER INITIALIZED")
     }
 
     async logout() {
@@ -104,7 +106,7 @@ class RemoteAuth extends BaseAuthStrategy {
         if (pathExists) {
             await this.compressSession();
             await this.store.save({session: this.sessionName});
-            await fs.promises.unlink(`${this.sessionName}.zip`);
+            await fs.promises.unlink(`${this.dataPath}/${this.sessionName}.zip`);
             await fs.promises.rm(`${this.tempDir}`, {
                 recursive: true,
                 force: true
@@ -114,8 +116,9 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async extractRemoteSession() {
+        console.log("ENTRANDO A EXTRACT REMOTE SESSION")
         const pathExists = await this.isValidPath(this.userDataDir);
-        const compressedSessionPath = `${this.sessionName}.zip`;
+        const compressedSessionPath = `${this.dataPath}/${this.sessionName}.zip`;
         const sessionExists = await this.store.sessionExists({session: this.sessionName});
         if (pathExists) {
             await fs.promises.rm(this.userDataDir, {
@@ -124,11 +127,15 @@ class RemoteAuth extends BaseAuthStrategy {
             }).catch(() => {});
         }
         if (sessionExists) {
+            console.log('REMOTE AUTH: SESIÓN EXISTE')
             await this.store.extract({session: this.sessionName, path: compressedSessionPath});
+            console.log('REMOTE AUTH: EXTRACT LISTO')
             await this.unCompressSession(compressedSessionPath);
+            console.log('REMOTE AUTH: UNCOMPRESS LISTO')
         } else {
             fs.mkdirSync(this.userDataDir, { recursive: true });
         }
+    console.log("SALIENDO DE EXTRACT REMOTE SESSION")
     }
 
     async deleteRemoteSession() {
@@ -138,7 +145,7 @@ class RemoteAuth extends BaseAuthStrategy {
 
     async compressSession() {
         const archive = archiver('zip');
-        const stream = fs.createWriteStream(`${this.sessionName}.zip`);
+        const stream = fs.createWriteStream(`${this.dataPath}/${this.sessionName}.zip`);
 
         await fs.copy(this.userDataDir, this.tempDir).catch(() => {});
         await this.deleteMetadata();
@@ -154,17 +161,7 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async unCompressSession(compressedSessionPath) {
-        await new Promise((resolve, reject) => {
-            var zip = new AdmZip(compressedSessionPath);
-            zip.extractAllToAsync(this.userDataDir, false, false, (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
-        await fs.promises.unlink(compressedSessionPath);
+        await(fs.createReadStream(compressedSessionPath).pipe(unzipper.Extract({ path: this.userDataDir })).promise())
     }
 
     async deleteMetadata() {
