@@ -14,6 +14,7 @@ try {
 const path = require('path');
 const { Events } = require('./../util/Constants');
 const BaseAuthStrategy = require('./BaseAuthStrategy');
+let afterAuthReadyTriggered = false
 
 /**
  * Remote-based authentication
@@ -87,15 +88,18 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async afterAuthReady() {
-        const sessionExists = await this.store.sessionExists({session: this.sessionName});
-        if(!sessionExists) {
-            await this.delay(60000); /* Initial delay sync required for session to be stable enough to recover */
-            await this.storeRemoteSession({emit: true});
+        if (!afterAuthReadyTriggered){
+            afterAuthReadyTriggered = true
+            const sessionExists = await this.store.sessionExists({session: this.sessionName});
+            if(!sessionExists) {
+                await this.delay(60000); /* Initial delay sync required for session to be stable enough to recover */
+                await this.storeRemoteSession({emit: true});
+            }
+            var self = this;
+            this.backupSync = setInterval(async function () {
+                await self.storeRemoteSession();
+            }, this.backupSyncIntervalMs);
         }
-        var self = this;
-        this.backupSync = setInterval(async function () {
-            await self.storeRemoteSession();
-        }, this.backupSyncIntervalMs);
     }
 
     async storeRemoteSession(options) {
