@@ -88,12 +88,18 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async afterAuthReady() {
+        console.log('After auth ready')
         if (!afterAuthReadyTriggered){
+            console.log('(After auth ready) ENTRÓ AL IF')
             afterAuthReadyTriggered = true
             const sessionExists = await this.store.sessionExists({session: this.sessionName});
+            console.log(`(After auth ready) Session exists: ${sessionExists}`)
             if(!sessionExists) {
-                await this.delay(60000); /* Initial delay sync required for session to be stable enough to recover */
+                console.log('(After auth ready) IF SESSION EXISTS')
+                await this.delay(1000*30); /* Initial delay sync required for session to be stable enough to recover */
+                console.log('(After auth ready) Delay ready')
                 await this.storeRemoteSession({emit: true});
+                console.log('(After auth ready) Store remote session ready')
             }
             var self = this;
             this.backupSync = setInterval(async function () {
