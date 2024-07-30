@@ -14,7 +14,7 @@ try {
 const path = require('path');
 const { Events } = require('./../util/Constants');
 const BaseAuthStrategy = require('./BaseAuthStrategy');
-let afterAuthReadyTriggered = false
+let afterAuthReadyTriggered = {}
 
 /**
  * Remote-based authentication
@@ -71,7 +71,10 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async destroy() {
+        console.log('(destroy remote auth) Triggered')
         clearInterval(this.backupSync);
+        afterAuthReadyTriggered[this.sessionName] = false
+        console.log('(destroy remote auth) Finished')
     }
 
     async disconnect() {
@@ -89,9 +92,9 @@ class RemoteAuth extends BaseAuthStrategy {
 
     async afterAuthReady() {
         console.log('After auth ready')
-        if (!afterAuthReadyTriggered){
+        if (!afterAuthReadyTriggered[this.sessionName]){
             console.log('(After auth ready) ENTRÓ AL IF')
-            afterAuthReadyTriggered = true
+            afterAuthReadyTriggered[this.sessionName] = true
             const sessionExists = await this.store.sessionExists({session: this.sessionName});
             console.log(`(After auth ready) Session exists: ${sessionExists}`)
             if(!sessionExists) {
