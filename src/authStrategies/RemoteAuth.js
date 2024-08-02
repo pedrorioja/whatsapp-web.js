@@ -92,6 +92,7 @@ class RemoteAuth extends BaseAuthStrategy {
 
     async afterAuthReady() {
         console.log('After auth ready')
+        console.log(afterAuthReadyTriggered)
         if (!afterAuthReadyTriggered[this.sessionName]){
             console.log('(After auth ready) ENTRÓ AL IF')
             afterAuthReadyTriggered[this.sessionName] = true
