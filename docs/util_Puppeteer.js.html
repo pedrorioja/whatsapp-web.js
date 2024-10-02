@@ -4,7 +4,7 @@
 <head>
   <meta name="generator" content="JSDoc 3.6.11">
   <meta charset="utf-8">
-  <title>whatsapp-web.js 1.26.1-alpha.1 &raquo; Source: authStrategies/BaseAuthStrategy.js</title>
+  <title>whatsapp-web.js 1.26.1-alpha.1 &raquo; Source: util/Puppeteer.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
@@ -26,36 +26,33 @@
         </div>
         <div id="jsdoc-main" role="main">
           <header class="page-header">
-            <h1>Source: authStrategies/BaseAuthStrategy.js</h1>
+            <h1>Source: util/Puppeteer.js</h1>
           </header>
           <article>
-            <pre class="prettyprint linenums"><code>&#x27;use strict&#x27;;
-
-/**
- * Base class which all authentication strategies extend
+            <pre class="prettyprint linenums"><code>/**
+ * Expose a function to the page if it does not exist
+ *
+ * NOTE:
+ * Rewrite it to &#x27;upsertFunction&#x27; after updating Puppeteer to 20.6 or higher
+ * using page.removeExposedFunction
+ * https://pptr.dev/api/puppeteer.page.removeExposedFunction
+ *
+ * @param {import(puppeteer).Page} page
+ * @param {string} name
+ * @param {Function} fn
  */
-class BaseAuthStrategy {
-    constructor() {}
-    setup(client) {
-        this.client &#x3D; client;
+async function exposeFunctionIfAbsent(page, name, fn) {
+    const exist &#x3D; await page.evaluate((name) &#x3D;&gt; {
+        return !!window[name];
+    }, name);
+    if (exist) {
+        return;
     }
-    async beforeBrowserInitialized() {}
-    async afterBrowserInitialized() {}
-    async onAuthenticationNeeded() {
-        return {
-            failed: false,
-            restart: false,
-            failureEventPayload: undefined
-        };
-    }
-    async getAuthEventPayload() {}
-    async afterAuthReady() {}
-    async disconnect() {}
-    async destroy() {}
-    async logout() {}
+    await page.exposeFunction(name, fn);
 }
 
-module.exports &#x3D; BaseAuthStrategy;</code></pre>
+module.exports &#x3D; {exposeFunctionIfAbsent};
+</code></pre>
           </article>
         </div>
       </div>
