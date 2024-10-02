@@ -3,7 +3,7 @@
         <head>
                 <meta name="generator" content="JSDoc 3.6.11">
                 <meta charset="utf-8">
-        <title>whatsapp-web.js 1.22.1 &raquo; Home</title>
+        <title>whatsapp-web.js 1.26.0 &raquo; Home</title>
                 <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
                 <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
                 <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
@@ -13,7 +13,7 @@
                 <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
     <div id="jsdoc-navbar-container">
         <div id="jsdoc-navbar-content">
-            <a href="index.html" class="jsdoc-navbar-package-name">whatsapp-web.<wbr>js 1.<wbr>22.<wbr>1</a>
+            <a href="index.html" class="jsdoc-navbar-package-name">whatsapp-web.<wbr>js 1.<wbr>25.<wbr>0</a>
         </div>
     </div>
 </nav>
@@ -26,25 +26,64 @@
                                         <div id="jsdoc-main" role="main">
                 <header class="page-header">
         <h1>
-            whatsapp-web.js 1.22.1
+            whatsapp-web.js 1.26.0
         </h1>
     </header>
 
-                <article><p><a href="https://www.npmjs.com/package/whatsapp-web.js"><img src="https://img.shields.io/npm/v/whatsapp-web.js.svg" alt="npm"></a> <a href="https://depfu.com/github/pedroslopez/whatsapp-web.js?project_id=9765"><img src="https://badges.depfu.com/badges/4a65a0de96ece65fdf39e294e0c8dcba/overview.svg" alt="Depfu"></a> <img src="https://img.shields.io/badge/WhatsApp_Web-2.2333.11-brightgreen.svg" alt="WhatsApp_Web 2.2333.11"> <a href="https://discord.gg/H7DqQs4"><img src="https://img.shields.io/discord/698610475432411196.svg?logo=discord" alt="Discord Chat"></a></p>
-<h1>whatsapp-web.js</h1>
-<p>A WhatsApp API client that connects through the WhatsApp Web browser app</p>
-<p>It uses Puppeteer to run a real instance of Whatsapp Web to avoid getting blocked.</p>
-<p><strong>NOTE:</strong> I can't guarantee you will not be blocked by using this method, although it has worked for me. WhatsApp does not allow bots or unofficial clients on their platform, so this shouldn't be considered totally safe.</p>
-<h2>Quick Links</h2>
+                <article><div align="center">
+    <br />
+    <p>
+        <a href="https://wwebjs.dev"><img src="https://github.com/wwebjs/logos/blob/main/4_Full%20Logo%20Lockup_Small/small_banner_blue.png?raw=true" title="whatsapp-web.js" alt="WWebJS Website" width="500" /></a>
+    </p>
+    <br />
+    <p>
+		<a href="https://www.npmjs.com/package/whatsapp-web.js"><img src="https://img.shields.io/npm/v/whatsapp-web.js.svg" alt="npm" /></a>
+        <a href="https://depfu.com/github/pedroslopez/whatsapp-web.js?project_id=9765"><img src="https://badges.depfu.com/badges/4a65a0de96ece65fdf39e294e0c8dcba/overview.svg" alt="Depfu" /></a>
+        <img src="https://img.shields.io/badge/WhatsApp_Web-2.2346.52-brightgreen.svg" alt="WhatsApp_Web 2.2346.52" />
+        <a href="https://discord.gg/H7DqQs4"><img src="https://img.shields.io/discord/698610475432411196.svg?logo=discord" alt="Discord server" /></a>
+	</p>
+    <br />
+</div>
+<h2>About</h2>
+<p><strong>A WhatsApp API client that connects through the WhatsApp Web browser app</strong></p>
+<p>The library works by launching the WhatsApp Web browser application and managing it using Puppeteer to create an instance of WhatsApp Web, thereby mitigating the risk of being blocked. The WhatsApp API client connects through the WhatsApp Web browser app, accessing its internal functions. This grants you access to nearly all the features available on WhatsApp Web, enabling dynamic handling similar to any other Node.js application.</p>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>It is not guaranteed you will not be blocked by using this method. WhatsApp does not allow bots or unofficial clients on their platform, so this shouldn't be considered totally safe.</strong></p>
+</blockquote>
+<h2>Links</h2>
 <ul>
-<li><a href="https://wwebjs.dev/guide">Guide / Getting Started</a> <em>(work in progress)</em></li>
-<li><a href="https://docs.wwebjs.dev/">Reference documentation</a></li>
+<li><a href="https://wwebjs.dev">Website</a></li>
+<li><a href="https://guide.wwebjs.dev/guide">Guide</a> (<a href="https://github.com/wwebjs/wwebjs.dev/tree/main">source</a>) <em>(work in progress)</em></li>
+<li><a href="https://docs.wwebjs.dev/">Documentation</a> (<a href="https://github.com/pedroslopez/whatsapp-web.js/tree/main/docs">source</a>)</li>
+<li><a href="https://discord.gg/H7DqQs4">WWebJS Discord</a></li>
 <li><a href="https://github.com/pedroslopez/whatsapp-web.js">GitHub</a></li>
 <li><a href="https://npmjs.org/package/whatsapp-web.js">npm</a></li>
 </ul>
 <h2>Installation</h2>
 <p>The module is now available on npm! <code>npm i whatsapp-web.js</code></p>
-<p>Please note that Node v12+ is required.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Node <code>v18+</code> is required.</strong></p>
+</blockquote>
+<h2>QUICK STEPS TO UPGRADE NODE</h2>
+<h3>Windows</h3>
+<h4>Manual</h4>
+<p>Just get the latest LTS from the <a href="https://nodejs.org/en/download/">official node website</a>.</p>
+<h4>npm</h4>
+<pre class="prettyprint source lang-powershell"><code>sudo npm install -g n
+sudo n stable
+</code></pre>
+<h4>Choco</h4>
+<pre class="prettyprint source lang-powershell"><code>choco install nodejs-lts
+</code></pre>
+<h4>Winget</h4>
+<pre class="prettyprint source lang-powershell"><code>winget install OpenJS.NodeJS.LTS
+</code></pre>
+<h3>Ubuntu / Debian</h3>
+<pre class="prettyprint source lang-bash"><code>curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+</code></pre>
 <h2>Example usage</h2>
 <pre class="prettyprint source lang-js"><code>const { Client } = require('whatsapp-web.js');
 
@@ -67,8 +106,8 @@ client.on('message', msg => {
 
 client.initialize();
 </code></pre>
-<p>Take a look at <a href="https://github.com/pedroslopez/whatsapp-web.js/blob/master/example.js">example.js</a> for another example with more use cases.</p>
-<p>For more information on saving and restoring sessions, check out the available <a href="https://wwebjs.dev/guide/authentication.html">Authentication Strategies</a>.</p>
+<p>Take a look at <a href="https://github.com/pedroslopez/whatsapp-web.js/blob/master/example.js">example.js</a> for another examples with additional use cases.<br>
+For further details on saving and restoring sessions, explore the provided <a href="https://wwebjs.dev/guide/creating-your-bot/authentication.html">Authentication Strategies</a>.</p>
 <h2>Supported features</h2>
 <table>
 <thead>
@@ -96,7 +135,7 @@ client.initialize();
 </tr>
 <tr>
 <td>Send media (video)</td>
-<td>✅ <a href="https://wwebjs.dev/guide/handling-attachments.html#caveat-for-sending-videos-and-gifs">(requires google chrome)</a></td>
+<td>✅ <a href="https://wwebjs.dev/guide/creating-your-bot/handling-attachments.html#caveat-for-sending-videos-and-gifs">(requires Google Chrome)</a></td>
 </tr>
 <tr>
 <td>Send stickers</td>
@@ -116,11 +155,11 @@ client.initialize();
 </tr>
 <tr>
 <td>Send buttons</td>
-<td>✅</td>
+<td>❌  <a href="https://www.youtube.com/watch?v=hv1R1rLeVVE">(DEPRECATED)</a></td>
 </tr>
 <tr>
 <td>Send lists</td>
-<td>✅ (business accounts not supported)</td>
+<td>❌  <a href="https://www.youtube.com/watch?v=hv1R1rLeVVE">(DEPRECATED)</a></td>
 </tr>
 <tr>
 <td>Receive location</td>
@@ -163,6 +202,10 @@ client.initialize();
 <td>✅</td>
 </tr>
 <tr>
+<td>Mention groups</td>
+<td>✅</td>
+</tr>
+<tr>
 <td>Mute/unmute chats</td>
 <td>✅</td>
 </tr>
@@ -186,11 +229,27 @@ client.initialize();
 <td>React to messages</td>
 <td>✅</td>
 </tr>
+<tr>
+<td>Create polls</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Vote in polls</td>
+<td>🔜</td>
+</tr>
+<tr>
+<td>Communities</td>
+<td>🔜</td>
+</tr>
+<tr>
+<td>Channels</td>
+<td>🔜</td>
+</tr>
 </tbody>
 </table>
 <p>Something missing? Make an issue and let us know!</p>
 <h2>Contributing</h2>
-<p>Pull requests are welcome! If you see something you'd like to add, please do. For drastic changes, please open an issue first.</p>
+<p>Feel free to open pull requests; we welcome contributions! However, for significant changes, it's best to open an issue beforehand. Make sure to review our <a href="https://github.com/pedroslopez/whatsapp-web.js/blob/main/CODE_OF_CONDUCT.md">contribution guidelines</a> before creating a pull request. Before creating your own issue or pull request, always check to see if one already exists!</p>
 <h2>Supporting the project</h2>
 <p>You can support the maintainer of this project through the links below</p>
 <ul>
@@ -199,16 +258,16 @@ client.initialize();
 <li><a href="https://m.do.co/c/73f906a36ed4">Sign up for DigitalOcean</a> and get $200 in credit when you sign up (Referral)</li>
 </ul>
 <h2>Disclaimer</h2>
-<p>This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates. The official WhatsApp website can be found at https://whatsapp.com. &quot;WhatsApp&quot; as well as related names, marks, emblems and images are registered trademarks of their respective owners.</p>
+<p>This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates. The official WhatsApp website can be found at <a href="https://whatsapp.com">whatsapp.com</a>. &quot;WhatsApp&quot; as well as related names, marks, emblems and images are registered trademarks of their respective owners. Also it is not guaranteed you will not be blocked by using this method. WhatsApp does not allow bots or unofficial clients on their platform, so this shouldn't be considered totally safe.</p>
 <h2>License</h2>
 <p>Copyright 2019 Pedro S Lopez</p>
-<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-you may not use this project except in compliance with the License.
+<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);<br>
+you may not use this project except in compliance with the License.<br>
 You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.</p>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
+<p>Unless required by applicable law or agreed to in writing, software<br>
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,<br>
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
+See the License for the specific language governing permissions and<br>
 limitations under the License.</p></article>
 
             <div class="symbol-index">
@@ -768,12 +827,22 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
+                <a href="Client.html#approveGroupMembershipRequests" class="!symbol-index-name">Client#<wbr>approveGroupMembershipRequests(groupId, options)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
                 <a href="Client.html#archiveChat" class="!symbol-index-name">Client#<wbr>archiveChat()</a>
             </dt>
             <dd>
             </dd>
             <dt class="symbol-index-name">
-                <a href="Client.html#createGroup" class="!symbol-index-name">Client#<wbr>createGroup(name, participants)</a>
+                <a href="Client.html#attachEventListeners" class="!symbol-index-name">Client#<wbr>attachEventListeners()</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#createGroup" class="!symbol-index-name">Client#<wbr>createGroup(title, participants, options)</a>
             </dt>
             <dd>
             </dd>
@@ -843,6 +912,11 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
+                <a href="Client.html#event:group_membership_request" class="!symbol-index-name">Client#<wbr>event:group_membership_request</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
                 <a href="Client.html#event:group_update" class="!symbol-index-name">Client#<wbr>event:group_update</a>
             </dt>
             <dd>
@@ -862,16 +936,21 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
-    </dl>
-</div>
-
-                            <div class="symbol-index-column">
-    <dl class="symbol-index-list">
             <dt class="symbol-index-name">
                 <a href="Client.html#event:message_ack" class="!symbol-index-name">Client#<wbr>event:message_ack</a>
             </dt>
             <dd>
             </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#event:message_ciphertext" class="!symbol-index-name">Client#<wbr>event:message_ciphertext</a>
+            </dt>
+            <dd>
+            </dd>
+    </dl>
+</div>
+
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
             <dt class="symbol-index-name">
                 <a href="Client.html#event:message_create" class="!symbol-index-name">Client#<wbr>event:message_create</a>
             </dt>
@@ -904,6 +983,11 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Client.html#event:ready" class="!symbol-index-name">Client#<wbr>event:ready</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#event:vote_update" class="!symbol-index-name">Client#<wbr>event:vote_update</a>
             </dt>
             <dd>
             </dd>
@@ -943,6 +1027,11 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
+                <a href="Client.html#getContactDeviceCount" class="!symbol-index-name">Client#<wbr>getContactDeviceCount(contactId)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
                 <a href="Client.html#getContacts" class="!symbol-index-name">Client#<wbr>getContacts()</a>
             </dt>
             <dd>
@@ -954,6 +1043,11 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Client.html#getFormattedNumber" class="!symbol-index-name">Client#<wbr>getFormattedNumber(number)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#getGroupMembershipRequests" class="!symbol-index-name">Client#<wbr>getGroupMembershipRequests(groupId)</a>
             </dt>
             <dd>
             </dd>
@@ -982,11 +1076,6 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
-    </dl>
-</div>
-
-                            <div class="symbol-index-column">
-    <dl class="symbol-index-list">
             <dt class="symbol-index-name">
                 <a href="Client.html#getState" class="!symbol-index-name">Client#<wbr>getState()</a>
             </dt>
@@ -1002,8 +1091,18 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
+    </dl>
+</div>
+
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
             <dt class="symbol-index-name">
                 <a href="Client.html#initialize" class="!symbol-index-name">Client#<wbr>initialize()</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#inject" class="!symbol-index-name">Client#<wbr>inject()</a>
             </dt>
             <dd>
             </dd>
@@ -1029,6 +1128,26 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Client.html#pinChat" class="!symbol-index-name">Client#<wbr>pinChat()</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#pupBrowser" class="!symbol-index-name">Client#<wbr>pupBrowser</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#pupPage" class="!symbol-index-name">Client#<wbr>pupPage</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#rejectGroupMembershipRequests" class="!symbol-index-name">Client#<wbr>rejectGroupMembershipRequests(groupId, options)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#requestPairingCode" class="!symbol-index-name">Client#<wbr>requestPairingCode(phoneNumber, showNotification)</a>
             </dt>
             <dd>
             </dd>
@@ -1059,6 +1178,26 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Client.html#sendSeen" class="!symbol-index-name">Client#<wbr>sendSeen(chatId)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#setAutoDownloadAudio" class="!symbol-index-name">Client#<wbr>setAutoDownloadAudio(flag)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#setAutoDownloadDocuments" class="!symbol-index-name">Client#<wbr>setAutoDownloadDocuments(flag)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#setAutoDownloadPhotos" class="!symbol-index-name">Client#<wbr>setAutoDownloadPhotos(flag)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Client.html#setAutoDownloadVideos" class="!symbol-index-name">Client#<wbr>setAutoDownloadVideos(flag)</a>
             </dt>
             <dd>
             </dd>
@@ -1338,13 +1477,18 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
+            <dt class="symbol-index-name">
+                <a href="global.html#Events#.GROUP_LEAVE" class="!symbol-index-name">Events.<wbr>GROUP_LEAVE</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
             <dt class="symbol-index-name">
-                <a href="global.html#Events#.GROUP_LEAVE" class="!symbol-index-name">Events.<wbr>GROUP_LEAVE</a>
+                <a href="global.html#Events#.GROUP_MEMBERSHIP_REQUEST" class="!symbol-index-name">Events.<wbr>GROUP_MEMBERSHIP_REQUEST</a>
             </dt>
             <dd>
             </dd>
@@ -1370,6 +1514,11 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="global.html#Events#.MESSAGE_ACK" class="!symbol-index-name">Events.<wbr>MESSAGE_ACK</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="global.html#Events#.MESSAGE_CIPHERTEXT" class="!symbol-index-name">Events.<wbr>MESSAGE_CIPHERTEXT</a>
             </dt>
             <dd>
             </dd>
@@ -1433,6 +1582,11 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
+            <dt class="symbol-index-name">
+                <a href="global.html#Events#.VOTE_UPDATE" class="!symbol-index-name">Events.<wbr>VOTE_UPDATE</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
@@ -1451,7 +1605,12 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
-                <a href="GroupChat.html#addParticipants" class="!symbol-index-name">GroupChat#<wbr>addParticipants(participantIds)</a>
+                <a href="GroupChat.html#addParticipants" class="!symbol-index-name">GroupChat#<wbr>addParticipants(participantIds, options)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="GroupChat.html#approveGroupMembershipRequests" class="!symbol-index-name">GroupChat#<wbr>approveGroupMembershipRequests(options)</a>
             </dt>
             <dd>
             </dd>
@@ -1516,12 +1675,12 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
-                <a href="GroupChat.html#getInviteCode" class="!symbol-index-name">GroupChat#<wbr>getInviteCode()</a>
+                <a href="GroupChat.html#getGroupMembershipRequests" class="!symbol-index-name">GroupChat#<wbr>getGroupMembershipRequests()</a>
             </dt>
             <dd>
             </dd>
             <dt class="symbol-index-name">
-                <a href="GroupChat.html#getLabels" class="!symbol-index-name">GroupChat#<wbr>getLabels()</a>
+                <a href="GroupChat.html#getInviteCode" class="!symbol-index-name">GroupChat#<wbr>getInviteCode()</a>
             </dt>
             <dd>
             </dd>
@@ -1530,6 +1689,11 @@ limitations under the License.</p></article>
 
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="GroupChat.html#getLabels" class="!symbol-index-name">GroupChat#<wbr>getLabels()</a>
+            </dt>
+            <dd>
+            </dd>
             <dt class="symbol-index-name">
                 <a href="GroupChat.html#id" class="!symbol-index-name">GroupChat#<wbr>id</a>
             </dt>
@@ -1606,7 +1770,7 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
-                <a href="GroupChat.html#removeParticipants" class="!symbol-index-name">GroupChat#<wbr>removeParticipants(participantIds)</a>
+                <a href="GroupChat.html#rejectGroupMembershipRequests" class="!symbol-index-name">GroupChat#<wbr>rejectGroupMembershipRequests(options)</a>
             </dt>
             <dd>
             </dd>
@@ -1615,6 +1779,11 @@ limitations under the License.</p></article>
 
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="GroupChat.html#removeParticipants" class="!symbol-index-name">GroupChat#<wbr>removeParticipants(participantIds)</a>
+            </dt>
+            <dd>
+            </dd>
             <dt class="symbol-index-name">
                 <a href="GroupChat.html#revokeInvite" class="!symbol-index-name">GroupChat#<wbr>revokeInvite()</a>
             </dt>
@@ -1637,6 +1806,11 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="GroupChat.html#sendStateTyping" class="!symbol-index-name">GroupChat#<wbr>sendStateTyping()</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="GroupChat.html#setAddMembersAdminsOnly" class="!symbol-index-name">GroupChat#<wbr>setAddMembersAdminsOnly([adminsOnly])</a>
             </dt>
             <dd>
             </dd>
@@ -1971,33 +2145,6 @@ limitations under the License.</p></article>
         </section>
         <section>
             <div class="symbol-index-content">
-                <h2 id="LegacySessionAuth">LegacySessionAuth</h2>
-                <div class="symbol-index-section">
-                            <div class="symbol-index-column">
-    <dl class="symbol-index-list">
-            <dt class="symbol-index-name">
-                <a href="LegacySessionAuth.html" class="!symbol-index-name">LegacySessionAuth(options)</a>
-            </dt>
-            <dd>
-            </dd>
-    </dl>
-</div>
-
-                            <div class="symbol-index-column">
-    <dl class="symbol-index-list">
-    </dl>
-</div>
-
-                            <div class="symbol-index-column">
-    <dl class="symbol-index-list">
-    </dl>
-</div>
-
-                </div>
-            </div>
-        </section>
-        <section>
-            <div class="symbol-index-content">
                 <h2 id="List">List</h2>
                 <div class="symbol-index-section">
                             <div class="symbol-index-column">
@@ -2114,7 +2261,12 @@ limitations under the License.</p></article>
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
             <dt class="symbol-index-name">
-                <a href="Location.html" class="!symbol-index-name">Location(latitude, longitude, description)</a>
+                <a href="Location.html" class="!symbol-index-name">Location(latitude, longitude[, options])</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Location.html#address" class="!symbol-index-name">Location#<wbr>address</a>
             </dt>
             <dd>
             </dd>
@@ -2138,11 +2290,21 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
+            <dt class="symbol-index-name">
+                <a href="Location.html#name" class="!symbol-index-name">Location#<wbr>name</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="Location.html#url" class="!symbol-index-name">Location#<wbr>url</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
@@ -2240,6 +2402,11 @@ limitations under the License.</p></article>
             </dt>
             <dd>
             </dd>
+            <dt class="symbol-index-name">
+                <a href="Message.html#getGroupMentions" class="!symbol-index-name">Message#<wbr>getGroupMentions()</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
@@ -2272,6 +2439,11 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Message.html#getReactions" class="!symbol-index-name">Message#<wbr>getReactions()</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Message.html#groupMentions" class="!symbol-index-name">Message#<wbr>groupMentions</a>
             </dt>
             <dd>
             </dd>
@@ -2356,6 +2528,11 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
+                <a href="Message.html#pin" class="!symbol-index-name">Message#<wbr>pin(duration)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
                 <a href="Message.html#rawData" class="!symbol-index-name">Message#<wbr>rawData</a>
             </dt>
             <dd>
@@ -2397,6 +2574,11 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Message.html#type" class="!symbol-index-name">Message#<wbr>type</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Message.html#unpin" class="!symbol-index-name">Message#<wbr>unpin()</a>
             </dt>
             <dd>
             </dd>
@@ -2667,6 +2849,11 @@ limitations under the License.</p></article>
             <dd>
             </dd>
             <dt class="symbol-index-name">
+                <a href="global.html#MessageTypes#.POLL_CREATION" class="!symbol-index-name">MessageTypes.<wbr>POLL_CREATION</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
                 <a href="global.html#MessageTypes#.PRODUCT" class="!symbol-index-name">MessageTypes.<wbr>PRODUCT</a>
             </dt>
             <dd>
@@ -2849,6 +3036,95 @@ limitations under the License.</p></article>
             </dd>
             <dt class="symbol-index-name">
                 <a href="Payment.html#paymentTxnStatus" class="!symbol-index-name">Payment#<wbr>paymentTxnStatus</a>
+            </dt>
+            <dd>
+            </dd>
+    </dl>
+</div>
+
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="symbol-index-content">
+                <h2 id="Poll">Poll</h2>
+                <div class="symbol-index-section">
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="Poll.html" class="!symbol-index-name">Poll(pollName, pollOptions, options)</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Poll.html#options" class="!symbol-index-name">Poll#<wbr>options</a>
+            </dt>
+            <dd>
+            </dd>
+    </dl>
+</div>
+
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="Poll.html#pollName" class="!symbol-index-name">Poll#<wbr>pollName</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="Poll.html#pollOptions" class="!symbol-index-name">Poll#<wbr>pollOptions</a>
+            </dt>
+            <dd>
+            </dd>
+    </dl>
+</div>
+
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
+    </dl>
+</div>
+
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="symbol-index-content">
+                <h2 id="PollVote">PollVote</h2>
+                <div class="symbol-index-section">
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="PollVote.html" class="!symbol-index-name">PollVote()</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="PollVote.html#interractedAtTs" class="!symbol-index-name">PollVote#<wbr>interractedAtTs</a>
+            </dt>
+            <dd>
+            </dd>
+    </dl>
+</div>
+
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="PollVote.html#parentMessage" class="!symbol-index-name">PollVote#<wbr>parentMessage</a>
+            </dt>
+            <dd>
+            </dd>
+            <dt class="symbol-index-name">
+                <a href="PollVote.html#selectedOptions" class="!symbol-index-name">PollVote#<wbr>selectedOptions</a>
+            </dt>
+            <dd>
+            </dd>
+    </dl>
+</div>
+
+                            <div class="symbol-index-column">
+    <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="PollVote.html#voter" class="!symbol-index-name">PollVote#<wbr>voter</a>
             </dt>
             <dd>
             </dd>
@@ -3601,11 +3877,21 @@ limitations under the License.</p></article>
 
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="window.html#.injectToFunction" class="!symbol-index-name">window.<wbr>injectToFunction(target, callback)</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
                             <div class="symbol-index-column">
     <dl class="symbol-index-list">
+            <dt class="symbol-index-name">
+                <a href="window.WWebJS.html#.generateWaveform" class="!symbol-index-name">window.<wbr>WWebJS.<wbr>generateWaveform()</a>
+            </dt>
+            <dd>
+            </dd>
     </dl>
 </div>
 
@@ -3622,7 +3908,7 @@ limitations under the License.</p></article>
                     <footer id="jsdoc-footer" class="jsdoc-footer">
                             <div id="jsdoc-footer-container">
                                     <p>
-                                      Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.11 on August 10, 2023.
+                                      Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.11 on September 18, 2024.
                                     </p>
                             </div>
                     </footer>
