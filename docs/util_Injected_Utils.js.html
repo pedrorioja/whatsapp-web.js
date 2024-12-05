@@ -482,11 +482,12 @@ exports.LoadUtils &#x3D; () &#x3D;&gt; {
     window.WWebJS.getChatModel &#x3D; async chat &#x3D;&gt; {
 
         let res &#x3D; chat.serialize();
-        res.isGroup &#x3D; chat.isGroup;
+        res.isGroup &#x3D; false;
         res.formattedTitle &#x3D; chat.formattedTitle;
-        res.isMuted &#x3D; chat.mute &amp;amp;&amp;amp; chat.mute.isMuted;
+        res.isMuted &#x3D; chat.muteExpiration &#x3D;&#x3D; 0 ? false : true;
 
         if (chat.groupMetadata) {
+            res.isGroup &#x3D; true;
             const chatWid &#x3D; window.Store.WidFactory.createWid((chat.id._serialized));
             await window.Store.GroupMetadata.update(chatWid);
             res.groupMetadata &#x3D; chat.groupMetadata.serialize();
