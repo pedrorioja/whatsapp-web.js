@@ -23,9 +23,10 @@ let afterAuthReadyTriggered = {}
  * @param {string} options.clientId - Client id to distinguish instances if you are using multiple, otherwise keep null if you are using only one instance
  * @param {string} options.dataPath - Change the default path for saving session files, default is: "./.wwebjs_auth/" 
  * @param {number} options.backupSyncIntervalMs - Sets the time interval for periodic session backups. Accepts values starting from 60000ms {1 minute}
+ * @param {number} options.rmMaxRetries - Sets the maximum number of retries for removing the session directory
  */
 class RemoteAuth extends BaseAuthStrategy {
-    constructor({ clientId, dataPath, store, backupSyncIntervalMs } = {}) {
+    constructor({ clientId, dataPath, store, backupSyncIntervalMs, rmMaxRetries } = {}) {
         if (!fs && !unzipper && !archiver) throw new Error('Optional Dependencies [fs-extra, unzipper, archiver] are required to use RemoteAuth. Make sure to run npm install correctly and remove the --no-optional flag');
         super();
 
@@ -44,6 +45,7 @@ class RemoteAuth extends BaseAuthStrategy {
         this.dataPath = path.resolve(dataPath || './.wwebjs_auth/');
         this.tempDir = `${this.dataPath}/wwebjs_temp_session_${this.clientId}`;
         this.requiredDirs = ['Default', 'IndexedDB', 'Local Storage']; /* => Required Files & Dirs in WWebJS to restore session */
+        this.rmMaxRetries = rmMaxRetries ?? 4;
     }
 
     async beforeBrowserInitialized() {
@@ -84,7 +86,8 @@ class RemoteAuth extends BaseAuthStrategy {
         if (pathExists) {
             await fs.promises.rm(this.userDataDir, {
                 recursive: true,
-                force: true
+                force: true,
+                maxRetries: this.rmMaxRetries,
             }).catch(() => {});
         }
         clearInterval(this.backupSync);
@@ -127,7 +130,8 @@ class RemoteAuth extends BaseAuthStrategy {
             console.log('FS PROMISES')
             await fs.promises.rm(`${this.tempDir}`, {
                 recursive: true,
-                force: true
+                force: true,
+                maxRetries: this.rmMaxRetries,
             }).catch(() => {});
             if(options && options.emit) this.client.emit(Events.REMOTE_SESSION_SAVED);
         }
@@ -141,7 +145,8 @@ class RemoteAuth extends BaseAuthStrategy {
         if (pathExists) {
             await fs.promises.rm(this.userDataDir, {
                 recursive: true,
-                force: true
+                force: true,
+                maxRetries: this.rmMaxRetries,
             }).catch(() => {});
         }
         if (sessionExists) {
@@ -194,7 +199,8 @@ class RemoteAuth extends BaseAuthStrategy {
                     if (stats.isDirectory()) {
                         await fs.promises.rm(dirElement, {
                             recursive: true,
-                            force: true
+                            force: true,
+                            maxRetries: this.rmMaxRetries,
                         }).catch(() => {});
                     } else {
                         await fs.promises.unlink(dirElement).catch(() => {});
