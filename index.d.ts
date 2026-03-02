@@ -322,12 +322,7 @@ declare namespace WAWebJS {
         on(event: 'auth_failure', listener: (message: string) => void): this
 
         /** Emitted when authentication is successful */
-        on(event: 'authenticated', listener: (
-            /** 
-             * Object containing session information, when using LegacySessionAuth. Can be used to restore the session
-             */
-            session?: ClientSession
-        ) => void): this
+        on(event: 'authenticated', listener: () => void): this
 
         /** 
          * Emitted when the battery percentage for the attached device changes
@@ -575,15 +570,7 @@ declare namespace WAWebJS {
         webVersionCache?: WebCacheOptions,
         /** How many times should the qrcode be refreshed before giving up
 		 * @default 0 (disabled) */
-		qrMaxRetries?: number,
-        /** 
-         * @deprecated This option should be set directly on the LegacySessionAuth
-         */
-        restartOnAuthFail?: boolean
-        /** 
-         * @deprecated Only here for backwards-compatibility. You should move to using LocalAuth, or set the authStrategy to LegacySessionAuth explicitly.  
-         */
-        session?: ClientSession
+		qrMaxRetries?: number
         /** If another whatsapp web session is detected (another browser), take over the session in the current browser
          * @default false */
         takeoverOnConflict?: boolean,
@@ -698,27 +685,6 @@ declare namespace WAWebJS {
         delete: (options: { session: string }) => Promise<any> | any,
         save: (options: { session: string }) => Promise<any> | any,
         extract: (options: { session: string, path: string }) => Promise<any> | any,
-    }
-
-    /**
-     * Legacy session auth strategy
-     * Not compatible with multi-device accounts.
-     */
-     export class LegacySessionAuth extends AuthStrategy {
-        constructor(options?: {
-            session?: ClientSession,
-            restartOnAuthFail?: boolean,
-        })
-    }
-
-    /** 
-     * Represents a WhatsApp client session
-     */
-    export interface ClientSession {
-        WABrowserId: string,
-        WASecretBundle: string,
-        WAToken1: string,
-        WAToken2: string,
     }
 
     /** 
@@ -876,6 +842,8 @@ declare namespace WAWebJS {
         AUTHENTICATED = 'authenticated',
         AUTHENTICATION_FAILURE = 'auth_failure',
         READY = 'ready',
+        CHAT_REMOVED = 'chat_removed',
+        CHAT_ARCHIVED = 'chat_archived',
         MESSAGE_RECEIVED = 'message',
         MESSAGE_CIPHERTEXT = 'message_ciphertext',
         MESSAGE_CREATE = 'message_create',
@@ -883,6 +851,8 @@ declare namespace WAWebJS {
         MESSAGE_REVOKED_ME = 'message_revoke_me',
         MESSAGE_ACK = 'message_ack',
         MESSAGE_EDIT = 'message_edit',
+        UNREAD_COUNT = 'unread_count',
+        MESSAGE_REACTION = 'message_reaction',
         MEDIA_UPLOADED = 'media_uploaded',
         CONTACT_CHANGED = 'contact_changed',
         GROUP_JOIN = 'group_join',
@@ -893,6 +863,7 @@ declare namespace WAWebJS {
         QR_RECEIVED = 'qr',
         CODE_RECEIVED = 'code',
         LOADING_SCREEN = 'loading_screen',
+        CALL = 'call',
         DISCONNECTED = 'disconnected',
         STATE_CHANGED = 'change_state',
         BATTERY_CHANGED = 'change_battery',
@@ -1712,6 +1683,8 @@ declare namespace WAWebJS {
         lastMessage: Message,
         /** Indicates if the Chat is pinned */
         pinned: boolean,
+        /** Indicates if the Chat is locked */
+        isLocked: boolean,
 
         /** Archives this chat */
         archive: () => Promise<void>,
