@@ -148,23 +148,43 @@ class RemoteAuth extends BaseAuthStrategy {
 
     async storeRemoteSession(options) {
         /* Compress &amp;amp; Store Session */
-        console.log(&#x27;ENTRANDO A STORE REMOTE SESSION&#x27;)
+        console.log(&#x27;ENTRANDO A STORE REMOTE SESSION&#x27;);
+    
         const pathExists &#x3D; await this.isValidPath(this.userDataDir);
-        console.log(this.userDataDir)
-        if (pathExists) {
-            console.log(&#x27;COMPRESS REMOTE SESSION&#x27;)
-            await this.compressSession();
-            console.log(&#x27;SAVE REMOTE SESSION&#x27;)
-            await this.store.save({session: this.sessionName});
-            console.log(&#x27;UNLINK&#x27;)
-            await fs.promises.unlink(&#x60;${this.dataPath}/${this.sessionName}.zip&#x60;);
-            console.log(&#x27;FS PROMISES&#x27;)
-            await fs.promises.rm(&#x60;${this.tempDir}&#x60;, {
-                recursive: true,
-                force: true,
-                maxRetries: this.rmMaxRetries,
-            }).catch(() &#x3D;&gt; {});
-            if(options &amp;amp;&amp;amp; options.emit) this.client.emit(Events.REMOTE_SESSION_SAVED);
+        console.log(this.userDataDir);
+    
+        if (!pathExists) return;
+    
+        let compressedSessionPath;
+    
+        try {
+            console.log(&#x27;COMPRESS REMOTE SESSION&#x27;);
+            compressedSessionPath &#x3D; await this.compressSession();
+    
+            console.log(&#x27;SAVE REMOTE SESSION&#x27;);
+            // Se privilegia current change (HEAD)
+            await this.store.save({ session: this.sessionName });
+    
+            if (options &amp;amp;&amp;amp; options.emit) {
+                this.client.emit(Events.REMOTE_SESSION_SAVED);
+            }
+        } finally {
+            const paths &#x3D; [
+                this.tempDir,
+                ...(compressedSessionPath
+                    ? [compressedSessionPath]
+                    : [&#x60;${this.dataPath}/${this.sessionName}.zip&#x60;])
+            ];
+    
+            await Promise.allSettled(
+                paths.map((p) &#x3D;&gt;
+                    fs.promises.rm(p, {
+                        recursive: true,
+                        force: true,
+                        maxRetries: this.rmMaxRetries,
+                    })
+                )
+            );
         }
     }
 
@@ -198,45 +218,41 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async compressSession() {
+        const stageDefaultPath &#x3D; path.join(this.tempDir, &#x27;Default&#x27;);
+        const userDataDefaultPath &#x3D; path.join(this.userDataDir, &#x27;Default&#x27;);
+
+        await fs.emptyDir(stageDefaultPath);
+        await this.copyByRequiredDirs(userDataDefaultPath, stageDefaultPath);
+
         const archive &#x3D; archiver(&#x27;zip&#x27;);
         const stream &#x3D; fs.createWriteStream(&#x60;${this.dataPath}/${this.sessionName}.zip&#x60;);
 
-        await fs.copy(this.userDataDir, this.tempDir).catch(() &#x3D;&gt; {});
-        await this.deleteMetadata();
-        return new Promise((resolve, reject) &#x3D;&gt; {
-            archive
-                .directory(this.tempDir, false)
-                .on(&#x27;error&#x27;, err &#x3D;&gt; reject(err))
-                .pipe(stream);
-
-            stream.on(&#x27;close&#x27;, () &#x3D;&gt; resolve());
+        await new Promise((resolve, reject) &#x3D;&gt; {
+            out.once(&#x27;close&#x27;, resolve);
+            out.once(&#x27;error&#x27;, reject);
+            archive.once(&#x27;error&#x27;, reject);
+        
+            archive.pipe(out);
+            archive.directory(this.tempDir, false);
             archive.finalize();
         });
+        return outPath;
     }
 
     async unCompressSession(compressedSessionPath) {
         await(fs.createReadStream(compressedSessionPath).pipe(unzipper.Extract({ path: this.userDataDir })).promise())
     }
 
-    async deleteMetadata() {
-        const sessionDirs &#x3D; [this.tempDir, path.join(this.tempDir, &#x27;Default&#x27;)];
-        for (const dir of sessionDirs) {
-            const sessionFiles &#x3D; await fs.promises.readdir(dir);
-            for (const element of sessionFiles) {
-                if (!this.requiredDirs.includes(element)) {
-                    const dirElement &#x3D; path.join(dir, element);
-                    const stats &#x3D; await fs.promises.lstat(dirElement);
-    
-                    if (stats.isDirectory()) {
-                        await fs.promises.rm(dirElement, {
-                            recursive: true,
-                            force: true,
-                            maxRetries: this.rmMaxRetries,
-                        }).catch(() &#x3D;&gt; {});
-                    } else {
-                        await fs.promises.unlink(dirElement).catch(() &#x3D;&gt; {});
-                    }
-                }
+    async copyByRequiredDirs(from, to) {
+        for (const d of this.requiredDirs) {
+            const src &#x3D; path.join(from, d);
+            if (await this.isValidPath(src)) {
+                const dest &#x3D; path.join(to, path.basename(src));
+                await fs.promises.cp(src, dest, {
+                    recursive: true,
+                    force: true,
+                    errorOnExist: false
+                });
             }
         }
     }
@@ -265,7 +281,7 @@ module.exports &#x3D; RemoteAuth;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.11 on January 30, 2026.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.11 on March 2, 2026.
       </p>
     </div>
   </footer>

@@ -342,7 +342,7 @@ class Message extends Base {
      */
     async reload() {
         const newData &#x3D; await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
             if (!msg) return null;
             return window.WWebJS.getMessageModel(msg);
         }, this.id._serialized);
@@ -401,8 +401,8 @@ class Message extends Base {
         if (!this.hasQuotedMsg) return undefined;
 
         const quotedMsg &#x3D; await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
-            const quotedMsg &#x3D; window.Store.QuotedMsg.getQuotedMsgObj(msg);
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
+            const quotedMsg &#x3D; window.require(&#x27;WAWebQuotedMsgModelUtils&#x27;).getQuotedMsgObj(msg);
             return window.WWebJS.getMessageModel(quotedMsg);
         }, this.id._serialized);
 
@@ -441,9 +441,9 @@ class Message extends Base {
         await this.client.pupPage.evaluate(async (messageId, reaction) &#x3D;&gt; {
             if (!messageId) return null;
             const msg &#x3D;
-                window.Store.Msg.get(messageId) || (await window.Store.Msg.getMessagesById([messageId]))?.messages?.[0];
+                (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(messageId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([messageId]))?.messages?.[0];
             if(!msg) return null;
-            await window.Store.sendReactionToMsg(msg, reaction);
+            await (window.require(&#x27;WAWebSendReactionMsgAction&#x27;))(msg, reaction);
         }, this.id._serialized, reaction);
     }
 
@@ -479,7 +479,7 @@ class Message extends Base {
         }
 
         const result &#x3D; await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
 
             // REUPLOADING mediaStage means the media is expired and the download button is spinning, cannot be downloaded now
             if (!msg || !msg.mediaData || msg.mediaData.mediaStage &#x3D;&#x3D;&#x3D; &#x27;REUPLOADING&#x27;) {
@@ -503,7 +503,7 @@ class Message extends Base {
                     addAnnotations: function() { return this; },
                     addPoint: function() { return this; }
                 };
-                const decryptedMedia &#x3D; await window.Store.DownloadManager.downloadAndMaybeDecrypt({
+                const decryptedMedia &#x3D; await (window.require(&#x27;WAWebDownloadManager&#x27;).downloadManager).downloadAndMaybeDecrypt({
                     directPath: msg.directPath,
                     encFilehash: msg.encFilehash,
                     filehash: msg.filehash,
@@ -539,21 +539,23 @@ class Message extends Base {
      */
     async delete(everyone, clearMedia &#x3D; true) {
         await this.client.pupPage.evaluate(async (msgId, everyone, clearMedia) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
-            const chat &#x3D; window.Store.Chat.get(msg.id.remote) || (await window.Store.Chat.find(msg.id.remote));
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
+            const chat &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Chat.get(msg.id.remote) || (await (window.require(&#x27;WAWebCollections&#x27;)).Chat.find(msg.id.remote));
             
             const canRevoke &#x3D;
-                window.Store.MsgActionChecks.canSenderRevokeMsg(msg) || window.Store.MsgActionChecks.canAdminRevokeMsg(msg);
+                window.require(&#x27;WAWebMsgActionCapability&#x27;).canSenderRevokeMsg(msg) || window.require(&#x27;WAWebMsgActionCapability&#x27;).canAdminRevokeMsg(msg);
 
+            const { Cmd } &#x3D; window.require(&#x27;WAWebCmd&#x27;); 
+            
             if (everyone &amp;amp;&amp;amp; canRevoke) {
-                return window.compareWwebVersions(window.Debug.VERSION, &#x27;&gt;&#x3D;&#x27;, &#x27;2.3000.0&#x27;)
-                    ? window.Store.Cmd.sendRevokeMsgs(chat, { list: [msg], type: &#x27;message&#x27; }, { clearMedia: clearMedia })
-                    : window.Store.Cmd.sendRevokeMsgs(chat, [msg], { clearMedia: true, type: msg.id.fromMe ? &#x27;Sender&#x27; : &#x27;Admin&#x27; });
+                return window.WWebJS.compareWwebVersions(window.Debug.VERSION, &#x27;&gt;&#x3D;&#x27;, &#x27;2.3000.0&#x27;)
+                    ? Cmd.sendRevokeMsgs(chat, { list: [msg], type: &#x27;message&#x27; }, { clearMedia: clearMedia })
+                    : Cmd.sendRevokeMsgs(chat, [msg], { clearMedia: true, type: msg.id.fromMe ? &#x27;Sender&#x27; : &#x27;Admin&#x27; });
             }
 
-            return window.compareWwebVersions(window.Debug.VERSION, &#x27;&gt;&#x3D;&#x27;, &#x27;2.3000.0&#x27;)
-                ? window.Store.Cmd.sendDeleteMsgs(chat, { list: [msg], type: &#x27;message&#x27; }, clearMedia)
-                : window.Store.Cmd.sendDeleteMsgs(chat, [msg], clearMedia);
+            return window.WWebJS.compareWwebVersions(window.Debug.VERSION, &#x27;&gt;&#x3D;&#x27;, &#x27;2.3000.0&#x27;)
+                ? Cmd.sendDeleteMsgs(chat, { list: [msg], type: &#x27;message&#x27; }, clearMedia)
+                : Cmd.sendDeleteMsgs(chat, [msg], clearMedia);
         }, this.id._serialized, everyone, clearMedia);
     }
 
@@ -562,10 +564,10 @@ class Message extends Base {
      */
     async star() {
         await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
-            if (window.Store.MsgActionChecks.canStarMsg(msg)) {
-                let chat &#x3D; await window.Store.Chat.find(msg.id.remote);
-                return window.Store.Cmd.sendStarMsgs(chat, [msg], false);
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
+            if (window.require(&#x27;WAWebMsgActionCapability&#x27;).canStarMsg(msg)) {
+                let chat &#x3D; await (window.require(&#x27;WAWebCollections&#x27;)).Chat.find(msg.id.remote);
+                return (window.require(&#x27;WAWebCmd&#x27;).Cmd).sendStarMsgs(chat, [msg], false);
             }
         }, this.id._serialized);
     }
@@ -575,10 +577,10 @@ class Message extends Base {
      */
     async unstar() {
         await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
-            if (window.Store.MsgActionChecks.canStarMsg(msg)) {
-                let chat &#x3D; await window.Store.Chat.find(msg.id.remote);
-                return window.Store.Cmd.sendUnstarMsgs(chat, [msg], false);
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
+            if (window.require(&#x27;WAWebMsgActionCapability&#x27;).canStarMsg(msg)) {
+                let chat &#x3D; await (window.require(&#x27;WAWebCollections&#x27;)).Chat.find(msg.id.remote);
+                return (window.require(&#x27;WAWebCmd&#x27;).Cmd).sendUnstarMsgs(chat, [msg], false);
             }
         }, this.id._serialized);
     }
@@ -622,12 +624,12 @@ class Message extends Base {
      */
     async getInfo() {
         const info &#x3D; await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
             if (!msg || !msg.id.fromMe) return null;
 
             return new Promise((resolve) &#x3D;&gt; {
                 setTimeout(async () &#x3D;&gt; {
-                    resolve(await window.Store.getMsgInfo(msg.id));
+                    resolve(await (window.require(&#x27;WAWebApiMessageInfoStore&#x27;).queryMsgInfo)(msg.id));
                 }, (Date.now() - msg.t * 1000 &amp;lt; 1250) &amp;amp;&amp;amp; Math.floor(Math.random() * (1200 - 1100 + 1)) + 1100 || 0);
             });
         }, this.id._serialized);
@@ -656,7 +658,7 @@ class Message extends Base {
     async getPayment() {
         if (this.type &#x3D;&#x3D;&#x3D; MessageTypes.PAYMENT) {
             const msg &#x3D; await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-                const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
+                const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
                 if(!msg) return null;
                 return msg.serialize();
             }, this.id._serialized);
@@ -685,7 +687,7 @@ class Message extends Base {
         }
 
         const reactions &#x3D; await this.client.pupPage.evaluate(async (msgId) &#x3D;&gt; {
-            const msgReactions &#x3D; await window.Store.Reactions.find(msgId);
+            const msgReactions &#x3D; await (window.require(&#x27;WAWebCollections&#x27;)).Reactions.find(msgId);
             if (!msgReactions || !msgReactions.reactions.length) return null;
             return msgReactions.reactions.serialize();
         }, this.id._serialized);
@@ -731,10 +733,10 @@ class Message extends Base {
             return null;
         }
         const messageEdit &#x3D; await this.client.pupPage.evaluate(async (msgId, message, options) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
             if (!msg) return null;
 
-            let canEdit &#x3D; window.Store.MsgActionChecks.canEditText(msg) || window.Store.MsgActionChecks.canEditCaption(msg);
+            let canEdit &#x3D; window.require(&#x27;WAWebMsgActionCapability&#x27;).canEditText(msg) || window.require(&#x27;WAWebMsgActionCapability&#x27;).canEditCaption(msg);
             if (canEdit) {
                 const msgEdit &#x3D; await window.WWebJS.editMessage(msg, message, options);
                 return msgEdit.serialize();
@@ -759,7 +761,7 @@ class Message extends Base {
         }
 
         const edittedEventMsg &#x3D; await this.client.pupPage.evaluate(async (msgId, editedEventObject) &#x3D;&gt; {
-            const msg &#x3D; window.Store.Msg.get(msgId) || (await window.Store.Msg.getMessagesById([msgId]))?.messages?.[0];
+            const msg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msgId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([msgId]))?.messages?.[0];
             if (!msg) return null;
 
             const { name, startTimeTs, eventSendOptions } &#x3D; editedEventObject;
@@ -773,8 +775,8 @@ class Message extends Base {
                 isEventCanceled: eventSendOptions.isEventCanceled,
             };
 
-            await window.Store.ScheduledEventMsgUtils.sendEventEditMessage(eventOptions, msg);
-            const editedMsg &#x3D; window.Store.Msg.get(msg.id._serialized);
+            await (window.require(&#x27;WAWebSendEventEditMsgAction&#x27;)).sendEventEditMessage(eventOptions, msg);
+            const editedMsg &#x3D; (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(msg.id._serialized);
             return editedMsg?.serialize();
         }, this.id._serialized, editedEventObject);
 
@@ -801,7 +803,7 @@ class Message extends Base {
             if (!Array.isArray(votes)) votes &#x3D; [votes];
             let localIdSet &#x3D; new Set();
             const msg &#x3D;
-                window.Store.Msg.get(messageId) || (await window.Store.Msg.getMessagesById([messageId]))?.messages?.[0];
+                (window.require(&#x27;WAWebCollections&#x27;)).Msg.get(messageId) || (await (window.require(&#x27;WAWebCollections&#x27;)).Msg.getMessagesById([messageId]))?.messages?.[0];
             if (!msg) return null;
 
             msg.pollOptions.forEach(a &#x3D;&gt; {
@@ -810,7 +812,7 @@ class Message extends Base {
                 }
             });
 
-            await window.Store.PollsSendVote.sendVote(msg, localIdSet);
+            await (window.require(&#x27;WAWebPollsSendVoteMsgAction&#x27;)).sendVote(msg, localIdSet);
         }, this.id._serialized, selectedOptions);
     }
 }
@@ -826,7 +828,7 @@ module.exports &#x3D; Message;
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.11 on January 30, 2026.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.11 on March 2, 2026.
       </p>
     </div>
   </footer>
