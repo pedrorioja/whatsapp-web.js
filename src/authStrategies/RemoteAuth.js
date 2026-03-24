@@ -218,25 +218,20 @@ class RemoteAuth extends BaseAuthStrategy {
     }
 
     async compressSession() {
-        const stageDefaultPath = path.join(this.tempDir, 'Default');
-        const userDataDefaultPath = path.join(this.userDataDir, 'Default');
-
-        await fs.emptyDir(stageDefaultPath);
-        await this.copyByRequiredDirs(userDataDefaultPath, stageDefaultPath);
-
         const archive = archiver('zip');
-        const stream = fs.createWriteStream(`${this.dataPath}/${this.sessionName}.zip`);
+        const stream = fs.createWriteStream(path.join(this.dataPath, `${this.sessionName}.zip`));
 
-        await new Promise((resolve, reject) => {
-            out.once('close', resolve);
-            out.once('error', reject);
-            archive.once('error', reject);
+        await fs.copy(this.userDataDir, this.tempDir).catch(() => {});
+        await this.deleteMetadata();
+        return new Promise((resolve, reject) => {
+            archive
+                .directory(this.tempDir, false)
+                .on('error', err => reject(err))
+                .pipe(stream);
 
-            archive.pipe(out);
-            archive.directory(this.tempDir, false);
+            stream.on('close', () => resolve());
             archive.finalize();
         });
-        return outPath;
     }
 
     async unCompressSession(compressedSessionPath) {
